@@ -7,7 +7,7 @@ const verifyToken = require('../middleware/verifyToken')
 const router = express.Router()
 
 // user register route
-router.post("register", async (req, res) => {
+router.post("/register", async (req, res) => {
     try {
         const { name, email, password, skillLevel, preferredLanguage } = req.body
         if (!name || !email || !password) {
@@ -17,11 +17,12 @@ router.post("register", async (req, res) => {
         if (user) {
             return res.status(400).json({ message: "user already exists" })
         }
+        const hassedPassword = await bcrypt.hash(password, 10)
 
         const newUser = new User({
             name: name,
             email: email,
-            password: password,
+            password: hassedPassword,
             skillLevel: skillLevel,
             preferredLanguage: preferredLanguage
         })
@@ -40,9 +41,10 @@ router.post("register", async (req, res) => {
 
 
 // user login route
-router.post("login", async (req, res) => {
+router.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body
+        console.log("Login attempt:", req.body);
         if (!email || !password) {
             return res.status(400).json({ message: "Please fill all the fields" })
         }
@@ -51,20 +53,23 @@ router.post("login", async (req, res) => {
             return res.status(400).json({ message: "user not found" })
         }
 
-        const hassedPassword = await bcrypt.hash(password, 10)
+        const isMatch = await bcrypt.compare(password, user.password)
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid password" })
+        }
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' })
 
-        const userInfo = new User({
+        const userInfo = {
+            id: user._id,
+            name: user.name,
             email: email,
-            password: hassedPassword,
+            skillLevel: user.skillLevel,
+            preferredLanguage: user.preferredLanguage,
+            profileImg: user.profileImg,
+            bio: user.bio
 
-        })
-
-        await userInfo.save()
-
+        }
         res.status(200).json({ message: "user created successfuly", user: userInfo, token: token })
-
-
     } catch (error) {
         console.error("register error:", error)
         res.status(500).json({ message: "Internal sever error" })
@@ -89,6 +94,8 @@ router.get("/profile", verifyToken, async (req, res) => {
         res.status(200).json({ user })
 
     } catch (error) {
+        console.error("register error:", error)
+        res.status(500).json({ message: "Internal sever error" })
 
     }
 })

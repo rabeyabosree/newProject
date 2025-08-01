@@ -4,11 +4,12 @@ const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    skillLevel: { type: ['Beginner', 'Intermediate', 'Advanced'], default: ['Beginner'] },
-    preferredLanguage: { type: ['JavaScript', 'Python', 'Java', 'C++', 'Ruby'], default: ['JavaScript'] },
-    createdAt: { type: Date, default: Date.now },
+    skillLevel: { type: [String], enum: ['Beginner', 'Intermediate', 'Advanced'], default: ['Beginner'] },
+    preferredLanguage: { type: [String], enum: ['JavaScript', 'Python', 'Java', 'C++', 'Ruby'], default: ['JavaScript'] },
     profileImg: { type: String },
-    bio: { type: String }
+    bio: { type: String },
+    createdAt: { type: Date, default: Date.now }
+    
 })
 
 

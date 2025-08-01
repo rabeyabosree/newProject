@@ -5,14 +5,25 @@ export const UserContext = createContext()
 
 export function UserProvider({ children }) {
   const [userData, setUserData] = useState(null)
+  const [updatedData, setUpdatedData] = useState([
+    {
+      name: '',
+      email: '',
+      password: '',
+      skillLevel: ['Begginer'],
+      preferredLanguage: ['Javascript'],
+      profileImg: '',
+      bio: ''
+    }
+  ])
 
   // Separate state for each form
   const [registerFormData, setRegisterFormData] = useState({
     name: '',
     email: '',
     password: '',
-    skillLevel: [],
-    preferredLanguage: []
+    skillLevel: ['Begginer'],
+    preferredLanguage: ['Javascript']
   })
 
   const [loginFormData, setLoginFormData] = useState({
@@ -20,6 +31,15 @@ export function UserProvider({ children }) {
     password: ''
   })
 
+  const [profileData, setProfileData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    skillLevel: [],
+    preferredLanguage: [],
+    profileImg: '',
+    bio: ''
+  })
   const BACKEND_URL = "http://localhost:5000"
 
   const registerUser = async () => {
@@ -46,12 +66,26 @@ export function UserProvider({ children }) {
   const userProfile = async () => {
     try {
       const token = localStorage.getItem("token")
-      const response = await axios.get(`${BACKEND_URL}/user/profile`, {
+      const response = await axios.get(`${BACKEND_URL}/api/user/profile`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
-      setUserData(response.data.user)
+      setProfileData(response.data.user)
+    } catch (error) {
+      console.error("Profile fetch error:", error)
+    }
+  }
+
+  const updateUserProfile = async () => {
+    try {
+      const token = localStorage.getItem("token")
+      const response = await axios.put(`${BACKEND_URL}/api/user/update-profile`,  updatedData , {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      setProfileData(response.data.user)
     } catch (error) {
       console.error("Profile fetch error:", error)
     }
@@ -68,7 +102,11 @@ export function UserProvider({ children }) {
         setLoginFormData,
         registerUser,
         loginUser,
-        userProfile
+        userProfile,
+        setProfileData,
+        profileData,
+        updateUserProfile,
+        setUpdatedData
       }}
     >
       {children}

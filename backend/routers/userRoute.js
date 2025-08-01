@@ -3,6 +3,7 @@ const User = require("../model/userModel")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const verifyToken = require('../middleware/verifyToken')
+const upload = require('../utility/storage')
 
 const router = express.Router()
 
@@ -91,7 +92,45 @@ router.get("/profile", verifyToken, async (req, res) => {
             return res.status(404).json({ message: "User not found" })
         }
 
-        res.status(200).json({ user })
+        res.status(200).json({ user: user, message: "user profle fetchied" })
+
+    } catch (error) {
+        console.error("register error:", error)
+        res.status(500).json({ message: "Internal sever error" })
+
+    }
+})
+
+// user profile update route
+router.put("/update-profile", verifyToken, upload.single('profileImg'), async (req, res) => {
+    try {
+        const userId = req.userId;
+        if (!userId) {
+            return res.status(400).json({ message: "user not found" })
+        }
+
+        const { skillLevel, preferredLanguage, bio } = req.body
+        const profileImg = req.file
+        console.log(profileImg)
+
+        const updateData = {
+            ...(bio && { bio }),
+            ...(preferredLanguage && {
+                preferredLanguage: Array.isArray(preferredLanguage) ? preferredLanguage : [preferredLanguage]
+            }),
+            ...(skillLevel && {
+                skillLevel: Array.isArray(skillLevel) ? skillLevel : [skillLevel]
+            }),
+            ...(profileImg && { profileImg })
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: updateData },
+            { $new: true }
+        )
+
+        res.status(200).json({ message: 'user updated', user: updatedUser })
 
     } catch (error) {
         console.error("register error:", error)

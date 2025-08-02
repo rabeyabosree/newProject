@@ -5,17 +5,17 @@ export const UserContext = createContext()
 
 export function UserProvider({ children }) {
   const [userData, setUserData] = useState(null)
-  const [updatedData, setUpdatedData] = useState([
-    {
-      name: '',
-      email: '',
-      password: '',
-      skillLevel: ['Begginer'],
-      preferredLanguage: ['Javascript'],
-      profileImg: '',
-      bio: ''
-    }
-  ])
+  // const [updatedData, setUpdatedData] = useState(
+  //   {
+  //     name: '',
+  //     email: '',
+  //     password: '',
+  //     skillLevel: [],
+  //     preferredLanguage: [],
+  //     profileImg: '',
+  //     bio: ''
+  //   }
+  // )
 
   // Separate state for each form
   const [registerFormData, setRegisterFormData] = useState({
@@ -76,15 +76,18 @@ export function UserProvider({ children }) {
       console.error("Profile fetch error:", error)
     }
   }
+  console.log("profile data", profileData)
+  
 
-  const updateUserProfile = async () => {
+  const updateUserProfile = async ( updatedData ) => {
     try {
       const token = localStorage.getItem("token")
-      const response = await axios.put(`${BACKEND_URL}/api/user/update-profile`,  updatedData , {
+      const response = await axios.put(`${BACKEND_URL}/api/user/update-profile`, updatedData, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
+      console.log(response.data.user)
       setProfileData(response.data.user)
     } catch (error) {
       console.error("Profile fetch error:", error)
@@ -106,7 +109,7 @@ export function UserProvider({ children }) {
         setProfileData,
         profileData,
         updateUserProfile,
-        setUpdatedData
+       
       }}
     >
       {children}

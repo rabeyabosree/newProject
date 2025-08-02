@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../context/userContext';
 
 function Profile() {
-  const { userProfile, profileData, updateUserProfile, setUpdatedData } = useContext(UserContext);
+  const { userProfile, profileData, updateUserProfile
+  } = useContext(UserContext);
 
   const [editMode, setEditMode] = useState(false);
   const [bio, setBio] = useState('');
@@ -10,53 +11,42 @@ function Profile() {
   const [skillLevel, setSkillLevel] = useState('');
   const [profileImg, setProfileImg] = useState(null);
 
-
   useEffect(() => {
-    if (profileData) {
-      setBio(profileData.bio || '');
-      setPreferredLanguage(
-        Array.isArray(profileData.preferredLanguage)
-          ? profileData.preferredLanguage
-          : typeof profileData.preferredLanguage === 'string'
-          ? [profileData.preferredLanguage]
-          : []
-      );
-      setSkillLevel(
-        Array.isArray(profileData.skillLevel)
-          ? profileData.skillLevel[0] || ''
-          : profileData.skillLevel || ''
-      );
-      setProfileImg(null); // clear local image on profile change
-    }
-  }, [profileData]);
+    userProfile()
+  }, [])
 
   const handleCheckboxChange = (lang) => {
     setPreferredLanguage((prev) =>
       prev.includes(lang) ? prev.filter((l) => l !== lang) : [...prev, lang]
     );
   };
-
-  const handleUpdate = async () => {
+  
+ const handleUpdate = async () => {
   try {
     const formData = new FormData();
     formData.append('bio', bio);
     formData.append('skillLevel', skillLevel);
-    preferredLanguage.forEach((lang) => formData.append('preferredLanguage', lang));
-    if (profileImg) formData.append('profileImg', profileImg);
-
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ':', pair[1]);
+    preferredLanguage.forEach((lang) =>
+      formData.append('preferredLanguage', lang)
+    );
+    if (profileImg) {
+      formData.append('profileImg', profileImg);
     }
 
-    setUpdatedData(formData);
-    await updateUserProfile();
-    console.log("user updated successfully")
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ':', pair[1]); // ✅ Proper log
+    }
+
+    await updateUserProfile(formData); // ✅ Directly send formData
+    await userProfile();               // ✅ Refresh updated data
     setEditMode(false);
+    console.log("User updated successfully");
   } catch (error) {
-    console.error('Update error:', error);
+    console.error("Update error:", error);
     alert('Failed to update profile: ' + (error.message || error));
   }
-};
+}
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
@@ -67,7 +57,7 @@ function Profile() {
               profileImg
                 ? URL.createObjectURL(profileImg)
                 : profileData?.profileImg ||
-                  'https://www.vecteezy.com/vector-art/5544718-profile-icon-design-vector'
+                'https://www.vecteezy.com/vector-art/5544718-profile-icon-design-vector'
             }
             alt="profile"
             className="w-32 h-32 rounded-full object-cover mb-4 border-4 border-indigo-500"
@@ -128,7 +118,7 @@ function Profile() {
             </>
           ) : (
             <>
-              <h1 className="text-2xl font-bold text-gray-800 mb-2">{profileData?.name || 'No Name'}</h1>
+              <h1 className="text-2xl font-bold text-gray-800 mb-2">{profileData?.name || 'User'}</h1>
               <h2 className="text-gray-600 mb-1">{profileData?.email || 'No Email'}</h2>
               <p className="text-sm text-gray-500 mb-2">
                 <strong>Languages:</strong>{' '}

@@ -40,12 +40,11 @@ router.post("/register", async (req, res) => {
     }
 })
 
-
 // user login route
 router.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body
-        console.log("Login attempt:", req.body);
+        
         if (!email || !password) {
             return res.status(400).json({ message: "Please fill all the fields" })
         }
@@ -110,7 +109,7 @@ router.put("/update-profile", verifyToken, upload.single('profileImg'), async (r
         }
 
         const { skillLevel, preferredLanguage, bio } = req.body
-        const profileImg = req.file
+        const profileImg = req.file.path
         console.log(profileImg)
 
         const updateData = {

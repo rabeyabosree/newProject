@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../context/userContext';
 
 function Profile() {
-  const { userProfile, profileData, updateUserProfile
-  } = useContext(UserContext);
+  const { userProfile, profileData, updateUserProfile } = useContext(UserContext);
 
   const [editMode, setEditMode] = useState(false);
   const [bio, setBio] = useState('');
@@ -12,136 +11,152 @@ function Profile() {
   const [profileImg, setProfileImg] = useState(null);
 
   useEffect(() => {
-    userProfile()
-  }, [])
+    userProfile();
+  }, []);
 
   const handleCheckboxChange = (lang) => {
     setPreferredLanguage((prev) =>
       prev.includes(lang) ? prev.filter((l) => l !== lang) : [...prev, lang]
     );
   };
-  
- const handleUpdate = async () => {
-  try {
-    const formData = new FormData();
-    formData.append('bio', bio);
-    formData.append('skillLevel', skillLevel);
-    preferredLanguage.forEach((lang) =>
-      formData.append('preferredLanguage', lang)
-    );
-    if (profileImg) {
-      formData.append('profileImg', profileImg);
+
+  const handleUpdate = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('bio', bio);
+      formData.append('skillLevel', skillLevel);
+      preferredLanguage.forEach((lang) =>
+        formData.append('preferredLanguage', lang)
+      );
+      if (profileImg) {
+        formData.append('profileImg', profileImg);
+      }
+
+      await updateUserProfile(formData);
+      await userProfile();
+      setEditMode(false);
+    } catch (error) {
+      console.error("Update error:", error);
+      alert('Failed to update profile: ' + (error.message || error));
     }
-
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ':', pair[1]); // ✅ Proper log
-    }
-
-    await updateUserProfile(formData); // ✅ Directly send formData
-    await userProfile();               // ✅ Refresh updated data
-    setEditMode(false);
-    console.log("User updated successfully");
-  } catch (error) {
-    console.error("Update error:", error);
-    alert('Failed to update profile: ' + (error.message || error));
-  }
-}
-
+  };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
-      <div className="bg-white shadow-lg rounded-2xl p-8 max-w-md w-full">
-        <div className="flex flex-col items-center text-center">
-          <img
-            src={
-              profileImg
-                ? URL.createObjectURL(profileImg)
-                : profileData?.profileImg ||
-                'https://www.vecteezy.com/vector-art/5544718-profile-icon-design-vector'
-            }
-            alt="profile"
-            className="w-32 h-32 rounded-full object-cover mb-4 border-4 border-indigo-500"
-          />
-
-          {editMode ? (
-            <>
-              <input
-                type="file"
-                accept="profileImg/*"
-                onChange={(e) => setProfileImg(e.target.files[0])}
-                className="mb-4"
-              />
-              <textarea
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                placeholder="Your bio..."
-                className="w-full p-2 border rounded mb-3"
-              />
-
-              <div className="text-left w-full mb-4">
-                <p className="font-medium mb-1">Preferred Languages</p>
-                <div className="flex flex-wrap gap-4">
-                  {['JavaScript', 'Python', 'C++'].map((lang) => (
-                    <label key={lang} className="inline-flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        checked={preferredLanguage.includes(lang)}
-                        onChange={() => handleCheckboxChange(lang)}
-                        className="form-checkbox h-5 w-5 text-indigo-600"
-                      />
-                      <span>{lang}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <div className="text-left w-full mb-6">
-                <p className="font-medium mb-1">Skill Level</p>
-                <select
-                  value={skillLevel}
-                  onChange={(e) => setSkillLevel(e.target.value)}
-                  className="w-full p-2 border rounded"
-                >
-                  <option value="">Select</option>
-                  <option value="Beginner">Beginner</option>
-                  <option value="Intermediate">Intermediate</option>
-                  <option value="Advanced">Advanced</option>
-                </select>
-              </div>
-
-              <button
-                onClick={handleUpdate}
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-              >
-                Save Changes
-              </button>
-            </>
-          ) : (
-            <>
-              <h1 className="text-2xl font-bold text-gray-800 mb-2">{profileData?.name || 'User'}</h1>
-              <h2 className="text-gray-600 mb-1">{profileData?.email || 'No Email'}</h2>
-              <p className="text-sm text-gray-500 mb-2">
-                <strong>Languages:</strong>{' '}
-                {Array.isArray(profileData?.preferredLanguage)
-                  ? profileData.preferredLanguage.join(', ')
-                  : 'Not Set'}
-              </p>
-              <p className="text-sm text-gray-500 mb-2">
-                <strong>Skill Level:</strong>{' '}
-                {Array.isArray(profileData?.skillLevel)
-                  ? profileData.skillLevel[0]
-                  : profileData?.skillLevel || 'Beginner'}
-              </p>
-              <p className="text-gray-700 mt-4">{profileData?.bio || 'No bio'}</p>
-
+    <div className="min-h-screen bg-gray-100 flex justify-center items-center px-4 py-10">
+      <div className="bg-white shadow-md rounded-2xl w-full max-w-4xl overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-3">
+          {/* Profile Image Side */}
+          <div className="bg-indigo-50 flex flex-col justify-center items-center p-6">
+            <img
+              src={
+                profileImg
+                  ? URL.createObjectURL(profileImg)
+                  : profileData?.profileImg ||
+                    'https://www.vecteezy.com/vector-art/5544718-profile-icon-design-vector'
+              }
+              alt="profile"
+              className="w-32 h-32 rounded-full object-cover border-4 border-indigo-500 mb-4"
+            />
+            <h2 className="text-xl font-bold text-gray-800 mb-1">{profileData?.name || 'User'}</h2>
+            <p className="text-sm text-gray-500">{profileData?.email || 'No Email'}</p>
+            {!editMode && (
               <button
                 onClick={() => setEditMode(true)}
-                className="mt-6 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+                className="mt-6 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition"
               >
                 Edit Profile
               </button>
-            </>
-          )}
+            )}
+          </div>
+
+          {/* Edit / View Form */}
+          <div className="lg:col-span-2 p-6">
+            {editMode ? (
+              <>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1">Profile Image</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setProfileImg(e.target.files[0])}
+                    className="w-full text-sm"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1">Bio</label>
+                  <textarea
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    rows={4}
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">Preferred Languages</label>
+                  <div className="flex flex-wrap gap-4">
+                    {['JavaScript', 'Python', 'C++'].map((lang) => (
+                      <label key={lang} className="flex items-center space-x-2 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={preferredLanguage.includes(lang)}
+                          onChange={() => handleCheckboxChange(lang)}
+                          className="form-checkbox text-indigo-600"
+                        />
+                        <span>{lang}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mb-6">
+                  <label className="block text-sm font-medium mb-1">Skill Level</label>
+                  <select
+                    value={skillLevel}
+                    onChange={(e) => setSkillLevel(e.target.value)}
+                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  >
+                    <option value="">Select</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                  </select>
+                </div>
+
+                <button
+                  onClick={handleUpdate}
+                  className="bg-green-600 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 transition"
+                >
+                  Save Changes
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="mb-4">
+                  <p className="text-sm text-gray-700">
+                    <strong>Bio:</strong> {profileData?.bio || 'No bio added.'}
+                  </p>
+                </div>
+                <div className="mb-4">
+                  <p className="text-sm text-gray-700">
+                    <strong>Languages:</strong>{' '}
+                    {Array.isArray(profileData?.preferredLanguage)
+                      ? profileData.preferredLanguage.join(', ')
+                      : 'Not Set'}
+                  </p>
+                </div>
+                <div className="mb-4">
+                  <p className="text-sm text-gray-700">
+                    <strong>Skill Level:</strong>{' '}
+                    {Array.isArray(profileData?.skillLevel)
+                      ? profileData.skillLevel[0]
+                      : profileData?.skillLevel || 'Beginner'}
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -149,6 +164,8 @@ function Profile() {
 }
 
 export default Profile;
+
+
 
 
 

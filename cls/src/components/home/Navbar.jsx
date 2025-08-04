@@ -12,7 +12,7 @@ function Navbar() {
   const navMenu = [
     { menu: "Home", link: "/home" },
     { menu: "Skill", link: "/skill" },
-    { menu: "Explore", link: "/explore" },
+    { menu: "Challengs", link: "/challengs" },
     { menu: "About", link: "/about" },
     { menu: "Contact", link: "/contact" }
   ];

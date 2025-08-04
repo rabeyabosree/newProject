@@ -76,9 +76,7 @@ export function UserProvider({ children }) {
       console.error("Profile fetch error:", error)
     }
   }
-  console.log("profile data", profileData)
-  
-
+ 
   const updateUserProfile = async ( updatedData ) => {
     try {
       const token = localStorage.getItem("token")

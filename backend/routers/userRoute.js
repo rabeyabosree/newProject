@@ -110,7 +110,6 @@ router.put("/update-profile", verifyToken, upload.single('profileImg'), async (r
 
         const { skillLevel, preferredLanguage, bio } = req.body
         const profileImg = req.file.path
-        console.log(profileImg)
 
         const updateData = {
             ...(bio && { bio }),

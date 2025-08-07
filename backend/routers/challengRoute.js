@@ -13,13 +13,14 @@ router.get("/challenge", verifyToken, async (req, res) => {
         }
 
         const { skillLevel, preferredLanguage } = req.query
+        console.log(skillLevel, preferredLanguage)
        
         if (!skillLevel || !preferredLanguage) {
             return res.status(400).json({ message: "Skill level and preferred language are required" });
         }
 
         // Format date to YYYY-MM-DD
-        const dayNumber = 8
+        const dayNumber = 1
 
         const challenge = await Challeng.findOne({
             skillLevel,

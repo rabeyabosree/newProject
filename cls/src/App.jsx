@@ -6,6 +6,10 @@ import { ChallengContextProvider } from './context/challengContext'
 import Login from './components/profile/Login'
 import Profile from './components/profile/Profile'
 import Challengs from './components/challenges/Challengs'
+import SkillPage from './components/skill/SkillPage'
+import AboutPage from './components/about/AboutPage'
+import Contact from './components/contact/Contact'
+import ChallengePage from './components/challenges/ChallengePage';
 
 
 function App() {
@@ -28,6 +32,11 @@ function App() {
               }
             />
             <Route path='/challengs' element={<Challengs />} />
+             <Route path='/challengs/:id' element={<ChallengePage />} />
+            <Route path='/skill' element={<SkillPage />} />
+            <Route path='/about' element={<AboutPage />} />
+            <Route path='/contact' element={<Contact />} />
+
           </Routes>
         </Router>
       </ChallengContextProvider>

@@ -1,8 +1,12 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { ChallengContext } from '../../context/challengContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 function Challengs() {
   const { challengs, generateChalenge } = useContext(ChallengContext);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -12,44 +16,74 @@ function Challengs() {
     const challengData = { skillLevel, preferredLanguage };
 
     generateChalenge(challengData);
+    setTimeout(() => setIsLoaded(true), 500); // simulate slight delay for animation
   }, []);
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md mt-10 font-sans text-gray-800">
-      <h1 className="text-3xl font-bold text-blue-600 mb-4">{challengs.title}</h1>
+    <div className="py-16 px-4">
+      <h1 className='text-center text-5xl font-bold text-gray-800 drop-shadow-sm mb-10'> Today’s Challenge </h1>
 
-      <p className="mb-6 text-lg leading-relaxed">{challengs.description}</p>
+      <AnimatePresence>
+        {isLoaded && challengs && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            className="max-w-3xl mx-auto bg-[#f7de8c] p-6 rounded-lg shadow-xl font-sans text-gray-800"
+            onClick={()=> navigate(`/challengs/${challengs._id}`)}
+          >
+            <h2 className="text-3xl font-semibold text-blue-600 mb-4">{challengs.title}</h2>
+            <p className="text-lg leading-relaxed mb-6">{challengs.description}</p>
 
-      <div className="flex flex-wrap gap-6 text-gray-600 text-sm mb-6">
-        <span><strong>Day:</strong> {challengs.dayNumber}</span>
-        <span><strong>Estimated Time:</strong> {challengs.estimatedTime}</span>
-        <span><strong>Language:</strong> {Array.isArray(challengs.preferredLanguage) ? challengs.preferredLanguage.join(', ') : challengs.preferredLanguage}</span>
-        <span><strong>Skill Level:</strong> {challengs.skillLevel}</span>
-      </div>
+            <div className="flex flex-wrap gap-4 mb-6 text-sm text-gray-600">
+              <span className="px-3 py-1 bg-blue-100 rounded-full">
+                <strong>Language:</strong> {Array.isArray(challengs.preferredLanguage) ? challengs.preferredLanguage.join(', ') : challengs.preferredLanguage}
+              </span>
+              <span className="px-3 py-1 bg-green-100 rounded-full">
+                <strong>Skill:</strong> {challengs.skillLevel}
+              </span>
+            </div>
 
-      {challengs.progress && challengs.progress.length > 0 && (
-        <div className="bg-blue-50 p-4 rounded-md text-gray-700">
-          <h3 className="text-xl font-semibold mb-3">Progress</h3>
-          <ul className="list-disc list-inside space-y-2">
-            {challengs.progress.map((prog, idx) => (
-              <li key={idx}>
-                <span className="font-medium">User:</span> {prog.userId} - <span className="font-medium">Status:</span> {prog.status} - <span className="font-medium">Submitted At:</span> {prog.submittedAt ? new Date(prog.submittedAt).toLocaleString() : 'N/A'}
-                {prog.solutionLink && (
-                  <div>
-                    <span className="font-medium">Solution:</span> <a href={prog.solutionLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{prog.solutionLink}</a>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {!challengs.progress || challengs.progress.length === 0 ? (
-        <p className="text-gray-500 italic">No progress available yet.</p>
-      ) : null}
+            {challengs.progress && challengs.progress.length > 0 ? (
+              <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-md">
+                <h3 className="text-xl font-semibold mb-3">📊 Your Progress</h3>
+                <ul className="space-y-2 text-sm">
+                  {challengs.progress.map((prog, idx) => (
+                    <li key={idx} className="border-b pb-2">
+                      <p><strong>User:</strong> {prog.userId}</p>
+                      <p><strong>Status:</strong> {prog.status}</p>
+                      <p><strong>Submitted At:</strong> {prog.submittedAt ? new Date(prog.submittedAt).toLocaleString() : 'N/A'}</p>
+                      {prog.solutionLink && (
+                        <p>
+                          <strong>Solution:</strong>{' '}
+                          <a
+                            href={prog.solutionLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 underline"
+                          >
+                            {prog.solutionLink}
+                          </a>
+                        </p>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <p className="text-gray-400 italic">No progress yet. Start your challenge now!</p>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
 export default Challengs;
+
+
+
+//  <span><strong>Day:</strong> {challengs.dayNumber}</span>
+//         <span><strong>Estimated Time:</strong> {challengs.estimatedTime}</span>

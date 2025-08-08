@@ -3,7 +3,8 @@ import teamImage from '../../assets/developerTeam.webp';
 
 function AboutPage() {
   return (
-    <div className="bg-[#CAE4DB] text-[#DCAE1D] px-4 py-[100px]">
+   <div className='mt-16 py-[60px] flex items-center justify-center'>
+     <div className="bg-[#CAE4DB] text-[#DCAE1D] px-8 py-14 max-w-4xl rounded-sm">
       <div className="max-w-4xl mx-auto space-y-8">
 
         {/* Title */}
@@ -43,6 +44,7 @@ function AboutPage() {
 
       </div>
     </div>
+   </div>
   );
 }
 

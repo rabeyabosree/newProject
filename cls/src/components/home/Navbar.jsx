@@ -22,13 +22,13 @@ function Navbar() {
   const toggleMenu = () => setIsOpen(!isOpen)
 
   return (
-    <header className='w-full fixed top-0 left-0 bg-[#CAE4DB] text-[#00303F] px-6 py-4 flex items-center justify-between z-50'>
+    <header className='w-full fixed top-0 left-0 bg-[#CAE4DB] text-[#00303F] px-8 py-4 flex items-center justify-between z-50'>
 
       <Logo />
 
       {/* Desktop menu */}
       <nav className="hidden md:block">
-        <ul className='flex gap-6'>
+        <ul className='flex gap-11'>
           {navMenu.map(({ menu, link }) => (
             <li key={link} className='cursor-pointer hover:text-[#7a949c] transition'>
               <Link to={link}>{menu}</Link>
@@ -40,15 +40,16 @@ function Navbar() {
       {/* Right side: Profile or Register */}
       <div className='hidden md:flex items-center gap-4'>
         {token ? (
-          <button aria-label="Go to profile" onClick={() => navigate("/profile")}>
-            <LuCircleUserRound width={42} height={42} />
+          <button aria-label="Go to profile"  onClick={() => navigate("/profile")}>
+            <LuCircleUserRound width={52} height={52} />
           </button>
         ) : (
+
           <button
-            className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition'
-            onClick={() => navigate("/register")}
+            className='bg-[#DCAE1D] text-[#00303F]  px-4 py-2 rounded hover:bg-[#00303F] hover:text-[#DCAE1D] transition'
+            onClick={() => navigate("/login")}
           >
-            Register
+            Login
           </button>
         )}
       </div>

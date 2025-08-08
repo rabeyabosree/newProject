@@ -20,7 +20,7 @@ function Challengs() {
   }, []);
 
   return (
-    <div className="py-16 px-4">
+    <div className="py-16 px-4 mt-10">
       <h1 className='text-center text-5xl font-bold text-gray-800 drop-shadow-sm mb-10'> Today’s Challenge </h1>
 
       <AnimatePresence>

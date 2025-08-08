@@ -20,9 +20,9 @@ function Register() {
     }
 
     return (
-        <div className='h-screen flex items-center justify-center bg-gray-100'>
+        <div className='h-screen flex items-center justify-center bg-[#e9edfa]'>
             <div className='bg-white p-8 rounded shadow-md w-full max-w-md'>
-                <h1 className='text-2xl font-bold mb-6 text-center'>Register</h1>
+                <h1 className='text-2xl text-[#DCAE1D] font-bold mb-6 text-center'>Register</h1>
                 <form onSubmit={handleSubmit} className='space-y-4'>
                     <input
                         type='text'
@@ -79,12 +79,12 @@ function Register() {
 
                     <button
                         type='submit'
-                        className='w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200'
+                        className='w-full bg-[#00303F] text-white px-6 py-3 rounded-xl text-base hover:text-[#abb4d1] transition'
                     >
                         Register
                     </button>
 
-                     <p className='text-center'>You have an account ? <Link to={"/login"} className='underline text-green-200'>login</Link> </p>
+                     <p className='text-center mt-2'>You have an account ? <Link to={"/login"} className='underline text-[#DCAE1D] hover:text-[#00303F]'>login</Link> </p>
                 </form>
             </div>
         </div>

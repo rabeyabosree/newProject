@@ -22,9 +22,9 @@ function Login() {
   }
 
   return (
-    <div className='h-screen flex items-center justify-center bg-white'>
+    <div className='h-screen flex items-center justify-center bg-[#e9edfa]'>
       <div className='bg-white p-8 w-full max-w-md rounded shadow-md'>
-        <h1 className='text-2xl font-bold mb-6 text-center'>Login</h1>
+        <h1 className='text-2xl text-[#DCAE1D] font-bold mb-6 text-center'>Login</h1>
         <form onSubmit={handleSubmit} className='space-y-4'>
           <input
             type='email'
@@ -47,13 +47,13 @@ function Login() {
           />
           <button
             type='submit'
-            className='w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200'
+            className='w-full bg-[#00303F] text-white px-6 py-3 rounded-xl text-base hover:text-[#abb4d1] transition'
           >
             Login
           </button>
-          <p className='text-center text-sm'>
+          <p className='text-center mt-2 text-sm'>
             Don&apos;t have an account?{' '}
-            <Link to="/register" className='underline text-blue-500 hover:text-blue-700'>
+            <Link to="/register" className='underline text-[#DCAE1D] hover:text-[#00303F]'>
               Register
             </Link>
           </p>

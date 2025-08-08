@@ -25,7 +25,8 @@ router.post("/register", async (req, res) => {
             email: email,
             password: hassedPassword,
             skillLevel: skillLevel,
-            preferredLanguage: preferredLanguage
+            preferredLanguage: preferredLanguage,
+            firstChallengeDate: new Date()
         })
 
         await newUser.save()

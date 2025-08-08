@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema({
     preferredLanguage: { type: [String], enum: ['JavaScript', 'Python', 'Java', 'C++', 'Ruby'], default: ['JavaScript'] },
     profileImg: { type: String },
     bio: { type: String },
+    firstChallengeDate: {
+        type: Date,
+        default: null
+    },
     createdAt: { type: Date, default: Date.now }
     
 })

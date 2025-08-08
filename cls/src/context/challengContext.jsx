@@ -9,6 +9,8 @@ export function ChallengContextProvider({ children }) {
 
     const BACKEND_API = "http://localhost:5000"
 
+    // https://newproject-bmzl.onrender.com
+
     // challenge generate 
     const generateChalenge = async (challengData) => {
         try {
@@ -21,12 +23,14 @@ export function ChallengContextProvider({ children }) {
             })
             
             setChallengs(challenge.data.challenge)
+            console.log(challenge.data.challenge )
 
         } catch (error) {
             console.error("challenge error", error)
 
         }
     }
+
 
     return (
         <ChallengContext.Provider value={{ challengs, generateChalenge }}>

@@ -14,9 +14,9 @@ const challengeSchema = new mongoose.Schema({
     description: { type: String, required: true },
     preferredLanguage: { type: [String], enum: ['JavaScript', 'Python', 'Java', 'C++', 'Ruby'], required: true },
     skillLevel: { type: String, enum: ['Beginner', 'Intermediate', 'Advanced'], required: true },
-    estimatedTime: {type: String, required: true},
-    dayNumber: {type: Number, required: true, unique : true},
-    progress: { type: [progresSchema], default: []},
+    estimatedTime: { type: String, required: true },
+    dayNumber: { type: Number, required: true, unique: true },
+    progress: { type: [progresSchema], default: [] },
     createdAt: {
         type: Date,
         default: Date.now

@@ -5,13 +5,16 @@ const languages = [
     { name: 'Python' },
     { name: 'Java' },
     { name: 'C++' },
+    { name: 'Ruby' },
+    { name: 'Rust' },
+    { name: 'C#' },
     { name: 'Ruby' }
 ];
 
 function SkillPage() {
     return (
-        <div className="py-16 px-4">
-            <h1 className="text-4xl font-bold text-center text-gray-800 mb-[100px]">
+        <div className="py-16 px-4 mt-8">
+            <h1 className="text-4xl font-bold text-center text-[#DCAE1D] mb-[50px]">
                 Challenges Available in Skills
             </h1>
 

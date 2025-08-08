@@ -1,7 +1,9 @@
 import React from 'react';
 import heroImg from '../../assets/6262451-removebg-preview.png'
+import { useNavigate } from 'react-router-dom';
 
 function Hero() {
+  const navigate = useNavigate()
   return (
     <div className="h-screen flex items-center justify-center overflow-auto px-6 sm:px-12 bg-[#CAE4DB]">
       <div className="max-w-5xl w-full flex flex-col-reverse lg:flex-row items-center justify-between gap-10">
@@ -15,7 +17,7 @@ function Hero() {
             Build fast. Scale smart. Impress users. Start your journey today with our tools and resources.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <button className="bg-[#00303F] text-white px-6 py-3 rounded-xl text-base hover:text-[#abb4d1] transition">
+            <button onClick={()=> navigate("/register") } className="bg-[#00303F] text-white px-6 py-3 rounded-xl text-base hover:text-[#abb4d1] transition">
               Get Started
             </button>
             <button className="border border-[#00303F] text-[#00303F] px-6 py-3 rounded-xl hover:bg-indigo-50 transition">

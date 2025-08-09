@@ -22,8 +22,8 @@ export function UserProvider({ children }) {
     name: '',
     email: '',
     password: '',
-    skillLevel: ['Begginer'],
-    preferredLanguage: ['Javascript']
+    skillLevel: ['Beginner'],
+    preferredLanguage: ['JavaScript']
   })
 
   const [loginFormData, setLoginFormData] = useState({

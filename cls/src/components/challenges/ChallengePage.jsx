@@ -33,7 +33,7 @@ function ChallengePage() {
           <strong>Skill Level:</strong> {challengs.skillLevel}
         </span>
         <span>
-          <strong>Language:</strong> {challengs.preferredLanguage.join(', ')}
+          <strong>Language:</strong> {challengs.preferredLanguage}
         </span>
         <span>
           <strong>Estimated Time:</strong> {challengs.estimatedTime}

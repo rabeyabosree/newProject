@@ -1,9 +1,10 @@
 import React, { useContext } from 'react'
 import { UserContext } from '../../context/userContext'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function Login() {
   const { loginUser, setLoginFormData, loginFormData } = useContext(UserContext)
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -19,6 +20,7 @@ function Login() {
     e.preventDefault() // ✅ Fixed
     loginUser()
     console.log("User logged in successfully")
+    navigate("/")
   }
 
   return (

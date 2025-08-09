@@ -1,9 +1,10 @@
 import React, { useContext } from 'react'
 import { UserContext } from './../../context/userContext';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function Register() {
     const { registerUser, setRegisterFormData, registerFormData } = useContext(UserContext)
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -17,6 +18,7 @@ function Register() {
         e.preventDefault()
         registerUser()
         console.log("register successfully")
+        navigate("/")
     }
 
     return (
